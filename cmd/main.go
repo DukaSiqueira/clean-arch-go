@@ -1,24 +1,18 @@
 package main
 
 import (
-	"cleanArchGo/infrastructure/environments"
 	"cleanArchGo/infrastructure/databases"
+	"cleanArchGo/infrastructure/environments"
+	"cleanArchGo/infrastructure/routers"
 	"os"
-
-	"github.com/gin-gonic/gin"
 )
 
-func main() {
+func init() {
 	environments.LoadEnv()
 	databases.NewMySQLConnection()
+}
 
-	router := gin.Default()
-
-	router.GET("/", func(ctx *gin.Context) {
-		ctx.JSON(200, gin.H{
-			"message": "Hello, World!!",
-		})
-	})
-
+func main() {
+	router := routers.SetupRouter()
 	router.Run(os.Getenv("APP_PORT"))
 }
